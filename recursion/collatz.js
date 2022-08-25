@@ -1,3 +1,5 @@
+// https://www.youtube.com/watch?v=mz6tAJMVmfM
+
 function collatz(n) {
   if (n == 1) {
     return 0;

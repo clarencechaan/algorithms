@@ -1,3 +1,5 @@
+// https://javascript.info/recursion
+
 let list = {
   value: 1,
   next: {

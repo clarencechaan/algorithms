@@ -63,6 +63,29 @@ class LinkedList {
     if (!curr) return "null";
     else return `( ${curr.value} ) -> ${this.toString(curr.next)}`;
   }
+
+  insertAt(value, index) {
+    let prev = null;
+    let curr = this.#head;
+    for (let i = 0; i < index; i++) {
+      prev = curr;
+      curr = curr.next;
+    }
+    if (prev) prev.next = new Node(value, curr);
+    else this.#head = new Node(value, curr);
+  }
+
+  removeAt(index) {
+    let prev = null;
+    let curr = this.#head;
+    for (let i = 0; i < index; i++) {
+      prev = curr;
+      curr = curr.next;
+    }
+
+    if (prev) prev.next = prev.next?.next || null;
+    else this.#head = this.#head?.next || null;
+  }
 }
 
 class Node {

@@ -103,6 +103,23 @@ class Tree {
     else if (value > node.data) return this.findRec(value, node.right);
   }
 
+  levelOrder(fn) {
+    return this.levelOrderRec(fn, [this.root]);
+  }
+
+  levelOrderRec(fn, queue) {
+    if (!queue.length) return [];
+
+    const newQ = [...queue];
+    const node = newQ.shift();
+
+    fn && fn(node);
+    if (node.left) newQ.push(node.left);
+    if (node.right) newQ.push(node.right);
+
+    return [node.data, ...this.levelOrderRec(fn, newQ)];
+  }
+
   prettyPrint(node = this.root, prefix = "", isLeft = true) {
     if (!node) return console.log("null");
     if (node?.right) {
@@ -124,7 +141,9 @@ class Tree {
 }
 
 const bst = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+const bst2 = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 // bst.insert(6);
 // bst.delete(324);
 // console.log(bst.find(9));
-bst.prettyPrint();
+// bst2.prettyPrint();
+// console.log(bst2.levelOrder((node) => {}));

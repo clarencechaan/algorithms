@@ -2,8 +2,8 @@ function mergeSort(arr) {
   if (arr.length === 1) {
     return arr;
   } else {
-    const halfA = arr.slice(0, Math.round(arr.length / 2));
-    const halfB = arr.slice(Math.round(arr.length / 2));
+    const halfA = arr.slice(0, Math.round((arr.length - 1) / 2));
+    const halfB = arr.slice(Math.round((arr.length - 1) / 2));
     const sortedA = mergeSort(halfA);
     const sortedB = mergeSort(halfB);
 

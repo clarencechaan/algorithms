@@ -16,16 +16,11 @@ class Tree {
 
   buildTree(arr) {
     if (!arr.length) return null;
-    else {
-      const mid = Math.round((arr.length - 1) / 2);
-      const smaller = arr.slice(0, mid);
-      const larger = arr.slice(mid + 1);
-      return new Node(
-        arr[mid],
-        this.buildTree(smaller),
-        this.buildTree(larger)
-      );
-    }
+
+    const mid = Math.round((arr.length - 1) / 2);
+    const smaller = arr.slice(0, mid);
+    const larger = arr.slice(mid + 1);
+    return new Node(arr[mid], this.buildTree(smaller), this.buildTree(larger));
   }
 
   arrQuickSort(arr) {
@@ -120,6 +115,51 @@ class Tree {
     return [node.data, ...this.levelOrderRec(fn, newQ)];
   }
 
+  inorder(fn) {
+    return this.inorderRec(fn, this.root);
+  }
+
+  inorderRec(fn, node) {
+    if (!node) return [];
+
+    fn && fn(node);
+    return [
+      ...this.inorderRec(fn, node.left),
+      node.data,
+      ...this.inorderRec(fn, node.right),
+    ];
+  }
+
+  preorder(fn) {
+    return this.preorderRec(fn, this.root);
+  }
+
+  preorderRec(fn, node) {
+    if (!node) return [];
+
+    fn && fn(node);
+    return [
+      node.data,
+      ...this.preorderRec(fn, node.left),
+      ...this.preorderRec(fn, node.right),
+    ];
+  }
+
+  postorder(fn) {
+    return this.postorderRec(fn, this.root);
+  }
+
+  postorderRec(fn, node) {
+    if (!node) return [];
+
+    fn && fn(node);
+    return [
+      ...this.postorderRec(fn, node.left),
+      ...this.postorderRec(fn, node.right),
+      node.data,
+    ];
+  }
+
   prettyPrint(node = this.root, prefix = "", isLeft = true) {
     if (!node) return console.log("null");
     if (node?.right) {
@@ -145,5 +185,5 @@ const bst2 = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 // bst.insert(6);
 // bst.delete(324);
 // console.log(bst.find(9));
+// console.log(bst2.postorder());
 // bst2.prettyPrint();
-// console.log(bst2.levelOrder((node) => {}));

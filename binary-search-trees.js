@@ -53,7 +53,8 @@ class Tree {
     this.root = this.insertRec(value, this.root);
   }
 
-  insertRec(value, node) {
+  insertRec(value, root) {
+    let node = root;
     if (!node) return new Node(value);
     else if (value <= node.data) node.left = this.insertRec(value, node.left);
     else if (value > node.data) node.right = this.insertRec(value, node.right);
@@ -64,7 +65,8 @@ class Tree {
     this.root = this.deleteRec(value, this.root);
   }
 
-  deleteRec(value, node) {
+  deleteRec(value, root) {
+    let node = root;
     if (node?.data === value) {
       if (!node.left && !node.right) return null;
       else if (!node.left != !node.right) return node.left || node.right;
@@ -75,16 +77,16 @@ class Tree {
   }
 
   // return inorder BST with root node deleted
-  inorderSuccessor(node) {
-    let root = node;
-    let nextLargest = root.right;
+  inorderSuccessor(root) {
+    let node = root;
+    let nextLargest = node.right;
     while (nextLargest.left) nextLargest = nextLargest.left;
 
-    root.data = nextLargest.data;
-    if (nextLargest === root.right) root.right = nextLargest.right;
-    else root.right.left = nextLargest.right;
+    node.data = nextLargest.data;
+    if (nextLargest === node.right) node.right = nextLargest.right;
+    else node.right.left = nextLargest.right;
 
-    return root;
+    return node;
   }
 
   find(value) {
@@ -166,17 +168,47 @@ class Tree {
   }
 
   depth(value, root = this.root) {
-    let curr = root;
+    let node = root;
     let depth = 0;
 
-    while (curr) {
-      if (curr.data === value) return depth;
-      else if (value <= curr.data) curr = curr.left;
-      else if (value > curr.data) curr = curr.right;
+    while (node) {
+      if (node.data === value) return depth;
+      else if (value <= node.data) node = node.left;
+      else if (value > node.data) node = node.right;
       depth += 1;
     }
 
     return null;
+  }
+
+  isBalanced() {
+    const minDepth = this.minDepth(this.root);
+    const maxDepth = this.height(this.root);
+
+    return maxDepth - minDepth <= 1;
+  }
+
+  minDepth(root) {
+    let node = root;
+    if (!node) return -1;
+
+    return 1 + Math.min(this.minDepth(node.left), this.minDepth(node.right));
+  }
+
+  rebalance() {
+    let arr = this.getArray(this.root);
+    arr = this.arrRemoveDuplicates(this.arrQuickSort(arr));
+    this.root = this.buildTree(arr);
+  }
+
+  getArray(root) {
+    let node = root;
+    if (!node) return [];
+    return [
+      ...this.getArray(node.left),
+      node.data,
+      ...this.getArray(node.right),
+    ];
   }
 
   prettyPrint(node = this.root, prefix = "", isLeft = true) {
@@ -198,14 +230,3 @@ class Tree {
     }
   }
 }
-
-const bst = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-const bst2 = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-const bst3 = new Tree([]);
-// bst3.insert(6);
-// bst3.delete(6);
-// console.log(bst3.find(9));
-// console.log(bst3.postorder());
-// console.log(bst3.height());
-// console.log(bst2.depth(10));
-// bst2.prettyPrint();
